@@ -1,173 +1,156 @@
-# SecureLens &mdash; DNS Tunneling Attack Detector
+# SecureLens — DNS Tunneling Attack Detector
 
-A React dashboard for detecting DNS tunneling &mdash; a technique attackers use to
-smuggle data or command-and-control traffic through ordinary-looking DNS
-queries. SecureLens lets you train multiple machine learning classifiers on
-labeled DNS query data, compare their performance, and run real-time
-detection on new queries.
+> **🚀 New: Model Selection!** Choose between Random Forest, SVM, or Logistic Regression models directly from the detection UI after training.
 
-![Dashboard screenshot](docs/screenshots/dashboard.png)
+A complete full-stack web application for detecting DNS tunneling using machine learning. Combines a React frontend with a Python Flask backend to train models and identify covert data exfiltration channels hidden in DNS queries.
 
-> 📸 **Screenshots below are placeholders.** Replace the images in
-> `docs/screenshots/` with real captures of your running app, keeping the same
-> file names, and they'll appear here automatically.
+---
 
-## Table of contents
+## ✨ Features
 
-- [Features](#features)
-- [Screenshots](#screenshots)
-- [Tech stack](#tech-stack)
-- [Project structure](#project-structure)
-- [Getting started](#getting-started)
-- [Backend API](#backend-api)
-- [Available scripts](#available-scripts)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
+### Core Functionality
+- **DNS Tunneling Detection** — Identify data exfiltration and C2 traffic disguised as ordinary DNS queries
+- **Multiple ML Models** — Train Random Forest, SVM, and Logistic Regression classifiers side-by-side
+- **Model Selection** — Choose which trained model to use for detection from a dropdown in the UI
+- **Real-time Analysis** — Paste or upload DNS queries and get instant results with confidence scores
+- **Flexible Training** — Upload your own CSV dataset (`query`, `label`) or use the sample data
+- **Performance Insights** — View accuracy metrics for all trained models and see which performed best
 
-## Features
-
-- 🤖 **Multiple ML models** &mdash; Random Forest, SVM, Logistic
-  Regression trained side by side.
-- ⚡ **Real-time detection** &mdash; paste or upload DNS queries and get an
-  instant suspicious/normal verdict with a confidence score.
-- 📊 **Model insights** &mdash; interactive accuracy charts and a best-model
-  callout after every training run.
-- 📁 **Flexible training data input** &mdash; type queries and labels
-  directly, or upload a CSV.
-- 🎨 **Polished, responsive UI** &mdash; built with React, React Router, and
-  Tailwind CSS, designed to work from mobile to desktop.
-
-## Screenshots
-
-| Dashboard | Detection | Model Training |
-|:---:|:---:|:---:|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Detection](docs/screenshots/detection.png) | ![Models](docs/screenshots/models.png) |
-
-<!--
-  To add your own screenshots:
-  1. Run the app locally (see "Getting started" below).
-  2. Capture the Dashboard, Detection, and Models pages.
-  3. Save them into docs/screenshots/ using the file names above
-     (dashboard.png, detection.png, models.png).
-  4. Commit the images — GitHub will render them inline in this README.
--->
-
-## Tech stack
-
+### Tech Stack
 | Layer | Technology |
-|---|---|
-| UI framework | React 18 |
-| Routing | React Router v6 |
-| Styling | Tailwind CSS |
-| Charts | Chart.js + react-chartjs-2 |
-| Icons | lucide-react |
-| HTTP client | axios |
-| Backend (not included) | Any REST API implementing the [endpoints below](#backend-api) — the original project used Python/Flask + scikit-learn |
+|-------|------------|
+| Frontend | React 18, Tailwind CSS, Chart.js, Axios |
+| Backend | Python 3, Flask, scikit-learn, Pandas, Joblib |
+| Models | Random Forest, SVM, Logistic Regression |
 
-## Project structure
+---
+
+## 📂 Project Structure
 
 ```
 DNS_Tunelling/
-├── public/
-│   └── index.html
+├── backend/
+│   ├── app.py                  # Main API endpoints
+│   ├── model_utils.py          # ML training, prediction, model management
+│   ├── requirements.txt        # Python dependencies
+│   └── models/                 # Saved models
+│       ├── best_model.joblib
+│       ├── random_forest.joblib
+│       ├── svm.joblib
+│       ├── logistic_regression.joblib
+│       └── model_info.json
 ├── src/
-│   ├── dns-tunneling/
-│   │   ├── DNSTunnelingApp.jsx      # Layout + internal routes for the tool
-│   │   ├── Navbar.jsx               # Dashboard / Detection / Models tabs
-│   │   ├── Dashboard.jsx            # Landing page for the DNS tool
-│   │   ├── Detection.jsx            # Run detection against DNS queries
-│   │   ├── Models.jsx               # Train and compare ML models
-│   │   └── components/
-│   │       ├── StatsCard.jsx
-│   │       └── FeatureCard.jsx
-│   ├── pages/
-│   │   └── Home.jsx                 # SecureLens platform landing page
-│   ├── App.jsx                      # Top-level route definitions
-│   ├── index.js                     # React entry point
-│   └── index.css                    # Tailwind directives + global styles
-├── docs/
-│   └── screenshots/                 # README screenshot placeholders
+│   └── dns-tunneling/
+│       ├── DNSTunnelingApp.jsx
+│       ├── Dashboard.jsx
+│       ├── Detection.jsx       # Detection with model dropdown
+│       └── Models.jsx          # Model training and results
 ├── .env.example
-├── tailwind.config.js
-├── postcss.config.js
 └── package.json
 ```
 
-## Getting started
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
+- Node.js 18 or later
+- Python 3.8 or later
+- npm
 
-- [Node.js](https://nodejs.org/) 18 or later
-- npm (bundled with Node.js)
-- A running backend that implements the [API below](#backend-api), or your
-  own mock server, if you want live data instead of a UI-only preview
-
-### Installation
-
+### 1. Clone the Repository
 ```bash
-# 1. Clone the repository
-git clone https://github.com/SyedHashirA/DNS_Tunelling
+git clone https://github.com/SyedHashirA/DNS_Tunelling.git
 cd DNS_Tunelling
-# 2. Install dependencies
+```
+
+### 2. Set Up the Backend
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 3. Set Up the Frontend
+```bash
+cd ..
 npm install
+```
 
-# 3. Configure the backend URL
+### 4. Configure Backend URL
+```bash
 cp .env.example .env
-# edit .env if your backend isn't at http://localhost:5003
+# Edit .env if your backend isn't at http://localhost:5003
+```
 
-# 4. Start the dev server
+### 5. Run the Application
+**Terminal 1 — Backend:**
+```bash
+cd backend
+python app.py
+```
+Runs on `http://localhost:5003`
+
+**Terminal 2 — Frontend:**
+```bash
 npm start
 ```
+Runs on `http://localhost:3000`
 
-The app will be available at `http://localhost:3000`. Visit
-`http://localhost:3000/dns-tunneling` to open the detector directly.
+Open: `http://localhost:3000/dns-tunneling`
 
-### Building for production
+---
 
-```bash
-npm run build
-```
+## 🎯 How It Works
 
-This outputs a static, deployable bundle to the `build/` directory, ready for
-GitHub Pages, Vercel, Netlify, or any static host.
+1. **Train** — Go to "Models" tab → Upload CSV with `query` and `label` (0=normal, 1=suspicious) → Click "Train Models"
+2. **Select** — Go to "Detection" tab → Choose your preferred model from the dropdown
+3. **Detect** — Enter DNS queries → Click "Detect Tunneling" → View results
 
-## Backend API
+---
 
-The frontend expects a REST backend exposing the following endpoints. Swap in
-any implementation (Flask, FastAPI, Express, etc.) as long as it matches
-these contracts:
+## 🔧 Backend API
 
 | Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/api/health` | Health check used on app load |
-| `GET` | `/api/models` | List available/trained model names |
-| `GET` | `/api/sample-data` | Sample normal & suspicious queries for quick testing |
-| `POST` | `/api/predict` | Run detection on a list of DNS queries |
-| `POST` | `/api/train` | Kick off asynchronous training across all models |
-| `GET` | `/api/training-progress` | Poll current training status/progress |
-| `GET` | `/api/results` | Fetch the most recent training results |
-| `POST` | `/api/validate-csv` | Validate an uploaded CSV before processing |
-| `POST` | `/api/upload-csv` | Parse an uploaded CSV into queries + labels |
+|--------|----------|---------|
+| `GET` | `/api/health` | Health check |
+| `GET` | `/api/models` | List trained models with accuracy |
+| `GET` | `/api/sample-data` | Get sample queries |
+| `POST` | `/api/predict` | Run detection on queries (supports `model` parameter) |
+| `POST` | `/api/train` | Train all models on uploaded CSV |
+| `GET` | `/api/training-progress` | Poll training progress |
+| `GET` | `/api/results` | Get training results and best model |
+| `POST` | `/api/validate-csv` | Validate CSV format |
+| `POST` | `/api/upload-csv` | Parse uploaded CSV |
 
-See `Detection.jsx` and `Models.jsx` for the exact request/response shapes
-each call expects.
+---
 
-## Available scripts
+## 📋 Available Scripts
 
 | Command | Description |
-|---|---|
-| `npm start` | Run the app in development mode with hot reload |
-| `npm run build` | Create an optimized production build |
-| `npm test` | Run the test suite in watch mode |
+|---------|-------------|
+| `npm start` | Run development server |
+| `npm run build` | Create production build |
+| `npm test` | Run tests |
 
-## Roadmap
+---
 
-- [ ] Add a lightweight reference backend implementation
-- [ ] Persist trained models between sessions
+## 🛣️ Roadmap
+
 - [ ] Add authentication for multi-user deployments
-- [ ] Expand SecureLens with additional detection tools beyond DNS tunneling
+- [ ] Expand with additional detection tools
+- [ ] Add model persistence across sessions
 
-## License
+---
 
-Distributed under the MIT License. See [`LICENSE`](LICENSE) for details.
+## 📝 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## 👨‍💻 Author
+
+**Syed Hashir Ahmed**  
+[GitHub](https://github.com/SyedHashirA) · [LinkedIn](https://linkedin.com/in/syed-hashir-ahmed)
