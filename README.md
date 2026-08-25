@@ -153,4 +153,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## 👨‍💻 Author
 
 **Syed Hashir Ahmed**  
-[GitHub](https://github.com/SyedHashirA) · [LinkedIn](https://linkedin.com/in/syed-hashir-ahmed)
+[GitHub](https://github.com/SyedHashirA)
